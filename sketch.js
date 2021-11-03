@@ -2,12 +2,17 @@ var Engine = Matter.Engine,
   World = Matter.World,
   Events = Matter.Events,
   Bodies = Matter.Bodies;
- 
+
+var balls = [];
 var particles = [];
 var plinkos = [];
 var divisions =[];
+var ball;
+
 var divisionHeight=300;
 var score =0;
+var count = 0;
+var gameState = "inicio";
 
 function setup() {
   createCanvas(800, 800);
@@ -28,23 +33,71 @@ function setup() {
     plinkos.push(new Plinko(j,r));
     }
   }
-
-  //crea los objetos partícula
-    for (var p = 50; p <=width-30; p=p+80) 
-    {
-    particles.push(new Particle(p,-10));
-    }
     
 }
- 
 
+function scoreSuma(){
+  if (ball.body.position.y>760)
+  {
+        if (ball.body.position.x < 300) 
+        {
+            score=score+500;      
+            ball=null;
+            if ( count>= 5) {
+              gameState ="end";
+            }                          
+        }
+
+
+        else if (ball.body.position.x < 600 && ball.body.position.x > 301 ) 
+        {
+              score = score + 100;
+              ball=null;
+              if ( count>= 5) {
+                gameState ="end";
+              }
+
+        }
+        else if (ball.body.position.x < 900 && ball.body.position.x > 601 )
+        {
+              score = score + 200;
+              ball=null;
+              if ( count>= 5) {
+                gameState ="end";
+              }
+
+        }      
+        
+  }
+}
+
+function mousePressed(){
+  //if(gameState === "inicio"){
+    ball=new Ball(mouseX, 10, 10, 10); 
+  //}  
+}
 
 function draw() {
   background("black");
-  textSize(20)
+  textSize(20);
  
   Engine.update(engine);
   ground.display();
+
+  text("100",25,600);
+  text("100",105,600);
+  text("200",185,600);      
+  text("100",265,600);
+  text("100",345,600);
+  text("300",425,600);
+  text("400",505,600);
+  text("200",585,600);
+  text("200",665,600);
+  text("100",745,600);
+
+  textSize(30);
+  text("puntos:"+score,30,25);
+
 
   if(frameCount%20===0){
     particles.push(new Particle(random(30,800),10,10));
@@ -64,4 +117,6 @@ function draw() {
   for (var d = 0; d < particles.length; d++) {
     particles[d].display();
   }
+  console.log(ball.body.position.y);
+  scoreSuma();
 }
