@@ -26,9 +26,9 @@ function setup() {
   }
   
   //crea las filas de objetos plinko
-  for (var r = 50; r <=height-350; r=r+80) 
+  for (var r = 50; r <=height-300; r=r+70) 
   {
-    for (var j = 50; j <=width-10; j=j+50) 
+    for (var j = 20; j <=width-5; j=j+40) 
     {
     plinkos.push(new Plinko(j,r));
     }
@@ -37,71 +37,80 @@ function setup() {
 }
 
 function scoreSuma(){
-  if (ball.body.position.y>760)
-  {
-        if (ball.body.position.x < 300) 
-        {
-            score=score+500;      
-            ball=null;
-            if ( count>= 5) {
+  if(ball!=null){ 
+    ball.display();
+    if (ball.body.position.y>760)
+    {
+      if (ball.body.position.x < 245 && ball.body.position.x > 5) 
+      {
+        score=score+100;      
+        ball=null;
+          if ( count>= 5) {
               gameState ="end";
-            }                          
+          }                         
+      }
+
+
+      else if (ball.body.position.x < 490 && ball.body.position.x > 245 ) 
+      {
+        score = score + 400;
+        ball=null;
+        if ( count>= 5) {
+                gameState ="end";
         }
 
-
-        else if (ball.body.position.x < 600 && ball.body.position.x > 301 ) 
+      }
+        else if (ball.body.position.x < 575 && ball.body.position.x > 490 )
         {
-              score = score + 100;
-              ball=null;
-              if ( count>= 5) {
-                gameState ="end";
-              }
+          score = score + 500;
+          ball=null;
+          if ( count>= 5) {
+            gameState ="end";
+          }
 
         }
-        else if (ball.body.position.x < 900 && ball.body.position.x > 601 )
-        {
-              score = score + 200;
-              ball=null;
-              if ( count>= 5) {
-                gameState ="end";
-              }
-
-        }      
         
+        else if (ball.body.position.x < 815 && ball.body.position.x > 575 )
+        {
+          score = score + 300;
+          ball=null;
+          if ( count>= 5) {
+            gameState ="end";
+          }
+
+        }
+    }
   }
 }
 
 function mousePressed(){
-  //if(gameState === "inicio"){
-    ball=new Ball(mouseX, 10, 10, 10); 
-  //}  
+  if(gameState === "inicio"){
+    ball=new Ball(mouseX, 10, 10, 10);
+    count++;
+  }  
 }
 
 function draw() {
-  background("black");
+  background(0);
   textSize(20);
  
   Engine.update(engine);
   ground.display();
 
+  fill(255,20,200);
   text("100",25,600);
   text("100",105,600);
-  text("200",185,600);      
-  text("100",265,600);
-  text("100",345,600);
-  text("300",425,600);
-  text("400",505,600);
-  text("200",585,600);
-  text("200",665,600);
-  text("100",745,600);
+  text("100",185,600);      
+  text("400",265,600);
+  text("400",345,600);
+  text("400",425,600);
+  text("500",505,600);
+  text("300",585,600);
+  text("300",665,600);
+  text("300",745,600);
 
   textSize(30);
   text("puntos:"+score,30,25);
-
-
-  if(frameCount%20===0){
-    particles.push(new Particle(random(30,800),10,10));
-  }
   
   //muestra los plinkos 
   for (var i = 0; i < plinkos.length; i++) {
@@ -112,11 +121,10 @@ function draw() {
   for (var k = 0; k < divisions.length; k++) {
     divisions[k].display();
   }
-
-  //muestra las partículas 
-  for (var d = 0; d < particles.length; d++) {
-    particles[d].display();
-  }
-  console.log(ball.body.position.y);
   scoreSuma();
+
+  if(gameState === "end"){
+    textSize(100);
+    text("¡fin del juego!",80,400);
+  }
 }
